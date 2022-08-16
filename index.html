@@ -1,0 +1,222 @@
+<!DOCTYPE html><html><head><script>
+let malFunc =["It's never too late to be what you might've been. | 16 AUG 2022 | The Gate II | 0xMalFunc"];
+console.log("%c"+malFunc,"font-weight: bold;");
+</script>
+<script src="p5.min.js"></script>
+<script src="chroma.min.js"></script>
+<script id="fxhash-snippet">
+let alphabet="123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ";
+var fxhash="oo"+Array(49).fill(0).map((e=>alphabet[Math.random()*alphabet.length|0])).join("");
+//var fxhash="oogo4m7m4X1oGNzLVB6ZE3L8m3rThJ8cFts1kaAv51BCMdT6RtT";
+let b58dec=e=>[...e].reduce(((e,a)=>e*alphabet.length+alphabet.indexOf(a)|0),0),fxhashTrunc=fxhash.slice(2),regex=new RegExp(".{"+(fxhashTrunc.length/4|0)+"}","g"),hashes=fxhashTrunc.match(regex).map((e=>b58dec(e))),sfc32=(e,a,h,r)=>()=>{var n=((e|=0)+(a|=0)|0)+(r|=0)|0;return r=r+1|0,e=a^a>>>9,a=(h|=0)+(h<<3)|0,h=(h=h<<21|h>>>11)+n|0,(n>>>0)/4294967296};var fxrand=sfc32(...hashes),isFxpreview="1"===new URLSearchParams(window.location.search).get("preview");function fxpreview(){console.log("fxhash: TRIGGER PREVIEW")}
+</script>
+<style>html{height:100%;}body{top:0;margin:0;padding:0;}canvas{padding:0;margin:auto;display:block;position:absolute;top:0;bottom:0;left:0;right:0;}main, .p5Canvas {height: 100vh !important;width : 100vh !important;display: block;}</style><body>
+<script>
+class MalRandom {
+    constructor() {
+        this.useA = !1;
+        let a = function(a) {
+                let b = parseInt(a.substr(0, 8, 16)),
+                    c = parseInt(a.substr(8, 8, 16)),
+                    d = parseInt(a.substr(16, 8, 16)),
+                    e = parseInt(a.substr(24, 8, 16));
+                return function() {
+                    d |= 0;
+                    let a = ((b |= 0) + (c |= 0) | 0) + (e |= 0) | 0;
+                    return e = e + 1 | 0, b = c ^ c >>> 9, c = d + (d << 3) | 0, d = d << 21 | d >>> 11, d = d + a | 0, (a >>> 0) / 4294967296
+                }
+            },
+            b = ascii_to_hex(fxhash);
+        this.prngA = new a(b.substr(2, 32)), this.prngB = new a(b.substr(34, 32));
+        for (let c = 0; c < 1e6; c += 2) this.prngA(), this.prngB()
+    }
+    maldec() {
+        return this.useA = !this.useA, this.useA ? this.prngA() : this.prngB()
+    }
+    malnum(a, b) {
+        return a + (b - a) * this.maldec()
+    }
+    malint(a, b) {
+        return Math.floor(this.malnum(a, b + 1))
+    }
+    malbool(a) {
+        return this.maldec() < a
+    }
+    malchoice(a) {
+        return a[this.malint(0, a.length - 1)]
+    }
+}
+class MalGraphicTool {
+    constructor(b) {
+        this.p = ["#FFC857", "#F07167", "#E2ECE9", "#E63946", "#0B525B", "#70C1B3", "#E76F51", "#43AA8B", "#FFBD00", "#118AB2", "#B3DEE2", "#F95738", "#86BBD8", "#F79256", "#F25F5C", "#2A9D8F", "#FEC89A", "#F4A261", "#DB3A34", "#FFE5D9", "#FFD166", "#4D908E", "#FCD5CE", "#F3722C", "#D8E2DC", "#0A9396", "#F25F5C", "#390099", "#7DCFB6", "#19647E", "#FFF4EC", "#084C61", "#F8961E", "#001219", "#EE964B", "#89B0AE", "#F26419", "#F9C74F", "#1B3A4B", "#272640", "#EA9AB2", "#0081A7", "#073B4C", "#323031", "#312244", "#264653", "#EFE9AE", "#FDFCDC", "#555B6E", "#FFD166", "#073B4C", "#BEE1E6", "#FFD6BA", "#F7EDE2", "#F94144", "#F2B880", "#FEE440", "#00F5D4", "#8F09D8", "#966B9D", "#119DA4", "#F29559", "#323031", "#247BA0", "#B8B08D", "#F9C74F", "#F2CC8F", "#577590", "#FAF9F9", "#FAD2E1", "#00BBF9", "#33658A", "#4B3F72", "#BB3E03", "#F8EDEB", "#177E89", "#ECE4DB", "#94D2BD", "#5A19D7", "#FFC857", "#005F73", "#FFE066", "#F5CAC3", "#BEE3DB", "#EF476F", "#FED9B7", "#FFAC81", "#9E0059", "#FAE1DD", "#84A59D", "#277DA1", "#EE9B00", "#E8E8E4", "#003049", "#FDF0D5", "#FFC857", "#00B2CA", "#FEC5BB", "#669BBC", "#C1121F", "#F12752", "#065A60", "#202C39", "#06D6A0", "#F4F1DE", "#CDDAFD", "#1D3557", "#50514F", "#EF476F", "#2F4858", "#283845", "#EFCFE3", "#AE2012", "#FFD7BA", "#1D4E89", "#F15BB5", "#118AB2", "#144552", "#00AFB9", "#43AA8B", "#1F2041", "#F117B2", "#247BA0", "#E9C46A", "#F3722C", "#0D3B66", "#FFE066", "#577590", "#E7CFBC", "#F9844A", "#F1FAEE", "#F28482", "#E27396", "#90BE6D", "#006466", "#FEC3A6", "#9B2226", "#81B29A", "#F8961E", "#90BE6D", "#FF928B", "#EAE4E9", "#C98686", "#97EE2E", "#E9D8A6", "#F6AE2D", "#50514F", "#780000", "#DFE7FD", "#06D6A0", "#70C1B3", "#EAF2D7", "#F2D492", "#CDEAC0", "#F4D35E", "#FAF0CA", "#9B5DE5", "#DB3A34", "#177E89", "#212F45", "#4D194D", "#3E1F47", "#084C61", "#FF0054", "#FBD1A2", "#FDE2E4", "#3D405B", "#28DDCE", "#F94144", "#F6BD60", "#FF5400", "#A8DADC", "#FFF1E6", "#457B9D", "#CA6702", "#F0EFEB", "#E07A5F"], this.sp = [];
+        for (var a = 0; a <= b; a++) this.sp[a] = MR.malchoice(this.p)
+    }
+    hex() {
+        return chroma(MR.malchoice(this.p)).hex()
+    }
+    c() {
+        return chroma(MR.malchoice(this.sp))
+    }
+    gradient(c, d, b) {
+        let a = drawingContext.createLinearGradient(0, 0, width, height);
+        if (a.addColorStop(0, c), a.addColorStop(.75, d), "fill" == b) drawingContext.fillStyle = a;
+        else if ("stroke" == b) drawingContext.strokeStyle = a;
+        else {
+            if ("full" != b) return a;
+            drawingContext.fillStyle = a, drawingContext.strokeStyle = a
+        }
+    }
+    lgrt(d, b, c) {
+        let a = drawingContext.createLinearGradient(0, 0, b, b);
+        return a.addColorStop(0, c[0]), a.addColorStop(1, c[1]), a
+    }
+    lightgradient(b) {
+        let a = drawingContext.createLinearGradient(0, 0, width, height);
+        return a.addColorStop(0, MC.c().brighten(3).hex()), a.addColorStop(1, MC.c().brighten(3).hex()), "fill" == b ? drawingContext.fillStyle = a : ("stroke" == b || (drawingContext.fillStyle = a), drawingContext.strokeStyle = a), a
+    }
+    shadow(a) {
+        drawingContext.shadowOffsetX = 2, drawingContext.shadowOffsetY = 2, drawingContext.shadowBlur = a, drawingContext.shadowColor = "black"
+    }
+    Mshadow(a, b) {
+        a.drawingContext.shadowOffsetX = 2, a.drawingContext.shadowOffsetY = 2, a.drawingContext.shadowBlur = b, a.drawingContext.shadowColor = "black"
+    }
+    Gshadow(a, b) {
+        a.drawingContext.shadowOffsetX = 10, a.drawingContext.shadowOffsetY = 10, a.drawingContext.shadowBlur = b, a.drawingContext.shadowColor = "black"
+    }
+}
+let MR, MC, Chance, mx = -50,
+    my = -50,
+    cx = 2,
+    cy = 2,
+    step = 1,
+    Points = [],
+    Crv = [],
+    spl, oSpl, liveA = 0,
+    spd, isDrawing, bgGradient, colorCount;
+
+function setup() {
+    createCanvas(800, 800),
+    ellipseMode(CENTER),
+    rectMode(CENTER),
+    angleMode(DEGREES),
+    pixelDensity(2),
+    colorCount = (MR = new MalRandom).malint(3,10),
+    MC = new MalGraphicTool(colorCount),
+    Chance = MR.malnum(.1,.4),
+    spd = MR.malnum(.2,.3),
+    claculateFeatures(colorCount,Chance,spd),
+    translate(width / 2,height / 2),
+    bgGradient = MC.gradient(MC.c().hex(),
+    MC.c().hex()),
+    claculatePoints(!1),
+    isDrawing = !0,
+    drawLoop(8,
+    function() {
+        drawCurves(MR.malint(1,
+        10))
+    }),
+    Points = null,
+    spl = createGraphics(800,800),
+    oSpl = createGraphics(800, 800)
+}
+
+function claculateFeatures(b, d, f) {
+    let a, c;
+    3 == b ? a = "Tin" : 4 == b ? a = "Dop" : 5 == b ? a = "Sen" : 6 == b ? a = "Qiz" : 7 == b ? a = "Fol" : 8 == b ? a = "Jim" : 9 == b ? a = "Pex" : 10 == b && (a = "Mot"), d > 0 ? c = "Z 0.25" : d > .1 ? c = "T 0.38" : d > .2 ? c = "O 0.63" : d > .3 && (c = "X 0.82");
+    let e = {
+        Style: a,
+        Chance: c,
+        Speed: floor(map(f, .2, .3, 0, 100))
+    };
+    return window.$fxhashFeatures = e, console.log(e), e
+}
+
+function draw() {
+    clear(), isDrawing ? (step > 500 ? isDrawing = !1 : drawLoop(10, function() {
+        drawSprials()
+    }), push(), translate(width / 2, height / 2), noStroke(), textAlign(CENTER), textSize(30), text("Please Wait...", 0, 0, 200, 200), text(floor(map(step, 1, 500, 1, 100)) + "%", 0, 50, 200, 200), pop()) : (imageMode(CENTER), translate(width / 2, height / 2), rotate(liveA), image(oSpl, 0, 0, 1.4 * width, 1.4 * height), rotate(2 * liveA), image(spl, 0, 0, 1.5 * width, 1.5 * height), 360 == liveA && (liveA = 0), 0 == liveA && fxpreview(), liveA += spd)
+}
+
+function drawSprials() {
+    spl.push(), spl.angleMode(DEGREES), spl.translate(spl.width / 2, spl.height / 2), MC.Mshadow(spl, 10);
+    for (var a = 0; a < Crv.length; a++) step <= 250 ? (spl.rotate(step), spl.image(Crv[a], mx, my, spl.width, spl.height), 250 == step && (oSpl.image(spl, 0, 0, spl.width, spl.height), spl.clear())) : (spl.rotate(2 * step), spl.image(Crv[a], mx, my, 1.5 * spl.width, 1.5 * spl.height));
+    step > 500 && (spl.noLoop(), Crv = null), mx++, my++, spl.pop(), step++
+}
+
+function drawLoop(b, c) {
+    for (var a = 0; a < b; a++) c()
+}
+
+function drawCurves(i) {
+    let a = createGraphics(width, height);
+    a.translate(-a.width / 2, -a.height / 2);
+    for (var d = 0; d < Points.length / 3; d++) {
+        a.noFill(), MC.Gshadow(a, 10);
+        let e = MC.gradient(MC.c().hex(), MC.c().hex());
+        a.drawingContext.fillStyle = e, a.drawingContext.strokeStyle = e, a.strokeWeight(i);
+        let b = [5, 25];
+        if (void 0 !== Points[d + 1].x) {
+            let j = MR.maldec(),
+                c = MR.malint(0, Points.length - 1),
+                f = MR.malint(0, Points.length - 1),
+                g = MR.malint(0, Points.length - 1),
+                h = MR.malint(0, Points.length - 1);
+            a.curveTightness(10), j > .5 && a.ellipse(Points[c].x, Points[c].y, MR.malchoice(b)), a.curve(Points[c].x, Points[c].y, Points[f].x - MR.malchoice(b), Points[f].y - MR.malchoice(b), Points[g].x, Points[g].y, Points[h].x - MR.malchoice(b), Points[h].y - MR.malchoice(b))
+        }
+    }
+    Crv.push(a), a.remove(), a = null
+}
+
+function claculatePoints(d) {
+    let c = width / 100 + 0;
+    stroke(0), strokeWeight(50);
+    for (var a = 0; a < c; a++)
+        for (var b = 0; b < c; b++) MR.malbool(Chance) && (d && point(100 * b, 100 * a), Points.push(createVector(100 * b, 100 * a)));
+    for (; Points.length < 20;) claculatePoints(!1);
+    return Points
+}
+
+function drawBackground(a) {
+    drawingContext.fillStyle = a, rect(0, 0, width + 40, height + 40)
+}
+
+function createColor() {
+    return chroma(MR.malint(0, 360), 1, .6, "hsl")
+}
+
+function radialGradient(c, d, e, f, g, h, i, j) {
+    let b = drawingContext.createRadialGradient(c, d, e, f, g, h);
+    for (var a = 0; a < colorCount; a++) b.addColorStop(map(a, 0, colorCount, 0, 1), gArr[a]);
+    drawingContext.fillStyle = b
+}
+
+function linearGradient(b, c, d, e, f, g) {
+    let a = drawingContext.createLinearGradient(b, c, d, e);
+    a.addColorStop(0, f), a.addColorStop(1, g), drawingContext.fillStyle = a
+}
+
+function granulate(b) {
+    loadPixels();
+    let c = pixelDensity(),
+        d = 4 * (width * c) * (height * c);
+    for (let a = 0; a < d; a += 8) grainAmount = random(-b, b), pixels[a] = pixels[a] + grainAmount, pixels[a + 1] = pixels[a + 1] + grainAmount, pixels[a + 2] = pixels[a + 2] + b, pixels[a + 3] = pixels[a + 3] + 5 * b;
+    updatePixels()
+}
+
+function hexToRgb(b) {
+    var a = parseInt(b = b.replace("#", ""), 16);
+    return color(a >> 16 & 255, a >> 8 & 255, 255 & a)
+}
+
+function ascii_to_hex(b) {
+    for (var c = [], a = 0, d = b.length; a < d; a++) {
+        var e = Number(b.charCodeAt(a)).toString(16);
+        c.push(e)
+    }
+    return c.join("")
+}
+
+function keyTyped() {
+    "s" === key && (noLoop(), save())
+}
+</script>
